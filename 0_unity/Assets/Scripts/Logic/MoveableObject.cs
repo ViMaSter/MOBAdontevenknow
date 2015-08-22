@@ -4,7 +4,6 @@ using System.Collections;
 public class MoveableObject : MonoBehaviour
 {
     public float MaxMovementSpeed = 1f;
-    private float Inaccuracy = 0.01f;
 
     private Vector2 currentTarget = Vector2.zero;
     public Vector2 CurrentTarget

@@ -4,20 +4,20 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour
 {
-    #region Gamefeel
-    public float CameraPositionLerp = 0.9f;
-    public float CameraPositionPeek = 3.0f;
-    public float PeekLerp = 0.9f;
-    #endregion
-
     public Transform Target;
 
-    public Vector3 PositionOffset;
-    public Vector3 TargetOffset;
-    public Vector3 cameraPositionPreLerp;
+    #region Gamefeel
+    public Vector3 PositionOffset = new Vector3(0, 12, -10);
+    public Vector3 TargetOffset = Vector3.zero;
 
-    public Vector3 PostLerpPosition;
-    public Vector3 LastPeek;
+    public float CameraPositionLerp = 0.3f;
+    public float CameraPositionPeek = 10.0f;
+    public float PeekLerp = 0.2f;
+    #endregion
+
+    private Vector3 PostLerpPosition;
+    private Vector3 LastPeek;
+
     [MenuItem("CONTEXT/CameraFollow/Use current offset to Vector3.zero")]
     private static void SetOffset(MenuCommand menuCommand)
     {
@@ -31,7 +31,7 @@ public class CameraFollow : MonoBehaviour
 
 	public void Update() {
         // Calculate the rotation angle
-        transform.rotation = Quaternion.LookRotation((TargetOffset) - PositionOffset, Vector3.up);
+        transform.rotation = Quaternion.LookRotation(TargetOffset - PositionOffset, Vector3.up);
 
         // Final position the camera will have: Target.position + PositionOffset
         Vector3 target = Target.position + PositionOffset;
@@ -39,12 +39,12 @@ public class CameraFollow : MonoBehaviour
         // Lerp to final position
         PostLerpPosition = Vector3.Lerp(PostLerpPosition, target, CameraPositionLerp);
 
-        // How far to peek: (target - transform.position).magnitude * CameraPositionPeek
+        // Peek to the direction of movement
         Vector3 peek = Vector3.Normalize(target - PostLerpPosition) * (target - PostLerpPosition).magnitude;
                 peek.y = 0.0f;
                 peek *= CameraPositionPeek;
 
-                LastPeek = Vector3.Lerp(LastPeek, peek, PeekLerp);
+        LastPeek = Vector3.Lerp(LastPeek, peek, PeekLerp);
 
         transform.position = Vector3.Lerp(transform.position, target + LastPeek, CameraPositionLerp);
     }
