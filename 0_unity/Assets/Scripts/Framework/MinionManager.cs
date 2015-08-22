@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class Minions
 {
@@ -32,6 +33,17 @@ public static class Minions
         gameObject.GetComponent<EnemyBehaviour>().Init(lane);
         gameObject.GetComponent<TeamAssociation>().IsLeftTeam = isLeftTeam;
         return gameObject;
+    }
+
+    public static void SpawnAllLanes(bool leftTeam, int MinionsPerLane)
+    {
+        foreach (KeyValuePair<string, Lane> lane in leftTeam ? Lanes.LeftTeam : Lanes.RightTeam)
+        {
+            for (int i = 0; i < MinionsPerLane; i++)
+            {
+                Minions.Create(leftTeam, (leftTeam ? Lanes.LeftTeam : Lanes.RightTeam)[lane.Key]);
+            }
+        }
     }
 }
 

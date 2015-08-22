@@ -10,7 +10,7 @@ public class AutoSpawnMinions : MonoBehaviour {
 
     public int UnitsPerLane = 4;
 
-    public void Start() {
+    void Start() {
         LastSpawnAt = -SpawnInterval;
     }
 
@@ -20,21 +20,8 @@ public class AutoSpawnMinions : MonoBehaviour {
         {
             LastSpawnAt = Time.time;
 
-            foreach (KeyValuePair<string, Lane> lane in Lanes.LeftTeam)
-            {
-                for (int i = 0; i < UnitsPerLane; i++)
-                {
-                    Minions.Create(true, Lanes.LeftTeam[lane.Key]);
-                }
-            }
-
-            foreach (KeyValuePair<string, Lane> lane in Lanes.RightTeam)
-            {
-                for (int i = 0; i < UnitsPerLane; i++)
-                {
-                    Minions.Create(false, Lanes.RightTeam[lane.Key]);
-                }
-            }
+            Minions.SpawnAllLanes(true, UnitsPerLane);
+            Minions.SpawnAllLanes(false, UnitsPerLane);
         }
     }
 }
