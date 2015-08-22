@@ -3,15 +3,14 @@ using System.Collections;
 
 public class PlayerControlled : MonoBehaviour
 {
-    MoveableObject MoveableObjectScript;
+    NavMeshAgent NavMeshAgent;
 
 	void Start () {
-        MoveableObjectScript = GetComponent<MoveableObject>();
+        NavMeshAgent = GetComponent<NavMeshAgent>();
 	}
-
-    void MoveableObjectScriptRoutine()
+    void GoToRoutine()
     {
-        if (MoveableObjectScript == null)
+        if (NavMeshAgent == null)
         {
             return;
         }
@@ -20,21 +19,20 @@ public class PlayerControlled : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 200.0f, ~(1 << 8))) {
-                MoveableObjectScript.CurrentTarget = new Vector2(hit.point.x, hit.point.z);
-                Debug.Log(string.Format("Click at: {0}\nMove to: {1}", Input.mousePosition, Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane))));
+            if (Physics.Raycast(ray, out hit, 200.0f, ~(1 << 8)))
+            {
+                NavMeshAgent.ResetPath();
+                NavMeshAgent.SetDestination(hit.point);
                 Particles.MousePointer(hit.point, true);
-                // init success particle
-            } else {
-                Debug.Log(string.Format("Click at: {0}\nMove to: Nowhere!", Input.mousePosition));
+            }
+            else
+            {
                 Particles.MousePointer(hit.point, false);
-                // init error particle
             }
         }
     }
-	
+	    
 	void Update () {
-        StartCoroutine("MoveableObjectScriptRoutine");
-        MoveableObjectScriptRoutine();
-	}
+        StartCoroutine("GoToRoutine");
+    }
 }

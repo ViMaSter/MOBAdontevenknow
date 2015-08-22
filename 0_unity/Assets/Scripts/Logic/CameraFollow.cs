@@ -13,6 +13,7 @@ public class CameraFollow : MonoBehaviour
     public float CameraPositionLerp = 0.3f;
     public float CameraPositionPeek = 10.0f;
     public float PeekLerp = 0.2f;
+    public float MaxPeakDistance = 1.0f;
     #endregion
 
     private Vector3 PostLerpPosition;
@@ -46,6 +47,6 @@ public class CameraFollow : MonoBehaviour
 
         LastPeek = Vector3.Lerp(LastPeek, peek, PeekLerp);
 
-        transform.position = Vector3.Lerp(transform.position, target + LastPeek, CameraPositionLerp);
+        transform.position = Vector3.Slerp(transform.position, target + LastPeek, CameraPositionLerp);
     }
 }

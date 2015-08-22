@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(HasHealth))]
 public class HealthToUI : MonoBehaviour
 {
     HasHealth HasHealthScript;

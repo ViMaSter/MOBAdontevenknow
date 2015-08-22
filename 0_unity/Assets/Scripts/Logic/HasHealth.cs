@@ -7,7 +7,7 @@ public class HasHealth : MonoBehaviour
     public int CurrentHealth = 0;
     public int MaxHealth = 100;
 
-    bool IsAlive;
+    bool IsAlive = true;
 
 	void Start ()
     {
@@ -28,6 +28,7 @@ public class HasHealth : MonoBehaviour
 
     void Die()
     {
-        IsAlive = true;
+        IsAlive = false;
+        GameObject.Destroy(gameObject);
     }
 }
