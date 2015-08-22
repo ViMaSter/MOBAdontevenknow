@@ -7,12 +7,15 @@ public enum AIState
     Attacking
 }
 
+[RequireComponent(typeof(AttackBehaviour))]
 [RequireComponent(typeof(TeamAssociation))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyBehaviour : MonoBehaviour
 {
-    NavMeshAgent NavMeshAgent;
+    bool IsAttackingHero = false;
+    AttackBehaviour AttackBehaviour;
     TeamAssociation TeamAssociation;
+    NavMeshAgent NavMeshAgent;
 
     AIState CurrentState = AIState.Idle;
  
@@ -21,15 +24,10 @@ public class EnemyBehaviour : MonoBehaviour
     int CurrentNodeID = 0;
     #endregion
 
-    #region Attacks
-    DamageInterface CurrentEnemy;
-    float LastAttackAt = 0.0f;
-    public float AttackRate = 0.8f;
-    #endregion
-
 
     public void Start()
     {
+        AttackBehaviour = GetComponent<AttackBehaviour>();
         TeamAssociation = GetComponent<TeamAssociation>();
         NavMeshAgent = GetComponent<NavMeshAgent>();
     }
@@ -48,19 +46,22 @@ public class EnemyBehaviour : MonoBehaviour
         }
     }
 
-    bool EngageInCombat()
+    bool EngageInCombat(bool withHeroes)
     {
-        RaycastHit[] allHits = Physics.SphereCastAll(transform.position, 3f, transform.forward, 3f, 1 << 8);
-        foreach (RaycastHit hit in allHits)
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, 3f, transform.forward, 3f, withHeroes ? 1 << 10 : 1 << 8);
+        foreach (RaycastHit hit in hits)
         {
             TeamAssociation teamAssociation = hit.transform.GetComponent<TeamAssociation>();
             if (teamAssociation)
             {
                 if (teamAssociation.IsLeftTeam != TeamAssociation.IsLeftTeam)
                 {
-                    // is enemy
-                    CurrentEnemy = hit.transform.GetComponent<DamageInterface>();
-                    return true;
+                    if (hit.transform.GetComponent<DamageInterface>())
+                    {
+                        AttackBehaviour.CurrentEnemy = hit.transform.GetComponent<DamageInterface>();
+                        IsAttackingHero = withHeroes;
+                        return true;
+                    }
                 }
             }
         }
@@ -76,39 +77,38 @@ public class EnemyBehaviour : MonoBehaviour
         switch (CurrentState)
         {
             case AIState.Attacking:
-                if (CurrentEnemy == null)
+                if (AttackBehaviour.CurrentEnemy == null)
                 {
-                    if (!EngageInCombat())
+                    if (!EngageInCombat(false) && !EngageInCombat(true))
                     {
                         CurrentState = AIState.Idle;
                     }
                 }
                 else
                 {
-                    if (NavMeshAgent.remainingDistance < 1.0f)
+                    // If a minion is attacking a hero, constantly search for
+                    // minions to attack with higher priority
+                    if (IsAttackingHero)
                     {
-                        NavMeshAgent.SetDestination(CurrentEnemy.transform.position);
+                        EngageInCombat(false);
                     }
 
-                    if (Vector3.Distance(transform.position, CurrentEnemy.transform.position) < 3.0f)
+                    if (NavMeshAgent.remainingDistance < 1.0f || (Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination) > 1.0f))
                     {
-                        if ((Time.time - LastAttackAt) > AttackRate)
-                        {
-                            LastAttackAt = Time.time;
-                            CurrentEnemy.ApplyDamage(20 + Random.Range(1, 6));
-                        }
+                        NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
                     }
+                    AttackBehaviour.Attack();
                 }
                 break;
             case AIState.Idle:
-                if (EngageInCombat())
+                if (EngageInCombat(false) || EngageInCombat(true))
                 {
                     CurrentState = AIState.Attacking;
-                    NavMeshAgent.SetDestination(CurrentEnemy.transform.position);
+                    NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
                     break;
                 }
 
-                if (NavMeshAgent.remainingDistance < 1.0f)
+                if (NavMeshAgent.remainingDistance < 3.0f)
                 {
                     ProgressToNextNode();
                 }

@@ -103,8 +103,11 @@ GameObject:
   - 114: {fileID: 6430594}
   - 114: {fileID: 6430595}
   - 195: {fileID: 6430587}
-  - 208: {fileID: 6430596}
-  m_Layer: 8
+  - 114: {fileID: 6430598}
+  - 114: {fileID: 6430597}
+  - 114: {fileID: 6430596}
+  - 114: {fileID: 6430599}
+  m_Layer: 10
   m_Name: PlayerObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,21 +241,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cfbd2c6d8f0e9d4f866abe188ed1eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!208 &6430596
-NavMeshObstacle:
+--- !u!114 &6430596
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 6430586}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 1, y: 1.5, z: 1}
-  m_MoveThreshold: .100000001
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: .5
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce31574c88ed534e9f0ccdd58668ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6430597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 6430586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c62440c9e596341bf363a15842413a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentEnemy: {fileID: 0}
+  AttackRate: .800000012
+--- !u!114 &6430598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 6430586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d785321cc09f8d04d91ac03ad9a9a6ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsLeftTeam: 1
+--- !u!114 &6430599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 6430586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84fb6266cba1ccb498fc23dc189e0211, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GeneralDefense: 20
 --- !u!1 &22154444
 GameObject:
   m_ObjectHideFlags: 0

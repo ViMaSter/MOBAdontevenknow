@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11424278}
   - 114: {fileID: 11471778}
   - 114: {fileID: 11468792}
+  - 114: {fileID: 11414636}
   - 114: {fileID: 11418078}
   - 114: {fileID: 11433852}
   - 195: {fileID: 19570656}
@@ -83,6 +84,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 122
   m_CollisionDetection: 0
+--- !u!114 &11414636
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 130150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c62440c9e596341bf363a15842413a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentEnemy: {fileID: 0}
+  AttackRate: .800000012
 --- !u!114 &11418078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -142,7 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f025f265b86858948ac8701a627ba6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackRate: .800000012
 --- !u!136 &13662356
 CapsuleCollider:
   m_ObjectHideFlags: 1
