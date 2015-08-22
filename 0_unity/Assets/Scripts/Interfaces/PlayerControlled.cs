@@ -25,6 +25,7 @@ public class PlayerControlled : MonoBehaviour
             {
                 AttackBehaviour.CurrentEnemy = null;
                 NavMeshAgent.SetDestination(hit.point);
+                NavMeshAgent.Resume();
                 Particles.MousePointer(hit.point, true);
             }
             else
@@ -49,6 +50,7 @@ public class PlayerControlled : MonoBehaviour
                 if (hit.transform.GetComponent<DamageInterface>())
                 {
                     NavMeshAgent.SetDestination(hit.transform.position);
+                    NavMeshAgent.Resume();
                     AttackBehaviour.CurrentEnemy = hit.transform.GetComponent<DamageInterface>();
                     Particles.MousePointer(hit.point, false);
                 }
@@ -65,11 +67,20 @@ public class PlayerControlled : MonoBehaviour
 
         if (AttackBehaviour.CurrentEnemy)
         {
-            if (NavMeshAgent.remainingDistance < 1.0f || (Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination) > 0.2f))
+            float DistanceFromEnemyToNavDestination = Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination);
+
+            AttackBehaviour.Attack();
+
+            if (DistanceFromEnemyToNavDestination > 0.2f)
             {
                 NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
+                NavMeshAgent.Resume();
             }
-            AttackBehaviour.Attack();
+            if (NavMeshAgent.remainingDistance < 2.0f)
+            {
+                NavMeshAgent.Stop();
+                return;
+            }
         }
     }
 	    

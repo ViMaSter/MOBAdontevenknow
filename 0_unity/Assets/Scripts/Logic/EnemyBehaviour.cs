@@ -43,6 +43,7 @@ public class EnemyBehaviour : MonoBehaviour
         if (CurrentNodeID < AssociatedLane.Nodes.Length)
         {
             NavMeshAgent.SetDestination(AssociatedLane.Nodes[CurrentNodeID]);
+            NavMeshAgent.Resume();
         }
     }
 
@@ -93,11 +94,20 @@ public class EnemyBehaviour : MonoBehaviour
                         EngageInCombat(false);
                     }
 
-                    if (NavMeshAgent.remainingDistance < 1.0f || (Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination) > 1.0f))
+                    float DistanceFromEnemyToNavDestination = Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination);
+
+                    AttackBehaviour.Attack();
+
+                    if (DistanceFromEnemyToNavDestination > 0.2f)
                     {
                         NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
+                        NavMeshAgent.Resume();
                     }
-                    AttackBehaviour.Attack();
+                    if (NavMeshAgent.remainingDistance < 2.0f)
+                    {
+                        NavMeshAgent.Stop();
+                        return;
+                    }
                 }
                 break;
             case AIState.Idle:
@@ -105,6 +115,7 @@ public class EnemyBehaviour : MonoBehaviour
                 {
                     CurrentState = AIState.Attacking;
                     NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
+                    NavMeshAgent.Resume();
                     break;
                 }
 
