@@ -5,15 +5,24 @@ using System.Collections.Generic;
 using ChatSharp;
 
 public class IRCClient : MonoBehaviour {
-    public IrcClient Client;
+    private IrcClient Client;
+    private EventManager EventManager;
 
-    public EventManager EventManager;
+    public string Username = "";
+    public string Password = "";
+    public string Roomname = "";
 
     public void Start() {
+        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Roomname))
+        {
+            Debug.LogWarning("IRC client requires configuration!", this);
+            return;
+        }
+
         EventManager = new EventManager();
 
         Debug.Log("[IRC] Starting...");
-        Client = new IrcClient("chat.eu.freenode.net", new IrcUser("ViMaSter_Game", "ViMaSter_Game"));
+        Client = new IrcClient("irc.twitch.tv", new IrcUser(Username, Username, Password));
         Client.ConnectionComplete += Client_ConnectionComplete;
         Client.ChannelMessageRecieved += Client_ChannelMessageRecieved;
 
@@ -53,11 +62,12 @@ public class IRCClient : MonoBehaviour {
     void Client_ChannelMessageRecieved(object sender, ChatSharp.Events.PrivateMessageEventArgs e)
     {
         Debug.Log("[IRC] Message!");
-        if (e.PrivateMessage.Message.Contains("spawn")) {
+        if (e.PrivateMessage.Message.Contains("team")) {
             if (e.PrivateMessage.Message.Contains("blue")) {
                 EventManager.QueueEvent(() =>
                 {
                     Minions.SpawnAllLanes(true, 2);
+                    Client.SendMessage("Sending reinforcements to team BLUE!", "#vimaster_game");
                 });
             }
 
@@ -66,6 +76,7 @@ public class IRCClient : MonoBehaviour {
                 EventManager.QueueEvent(() =>
                 {
                     Minions.SpawnAllLanes(false, 2);
+                    Client.SendMessage("Sending reinforcements to team RED!", "#vimaster_game");
                 });
             }
         }
@@ -78,11 +89,16 @@ public class IRCClient : MonoBehaviour {
     void Client_ConnectionComplete(object sender, System.EventArgs e)
     {
         Debug.Log("[IRC] Connected!");
-        Client.JoinChannel("#MOBAdontevenknow");
+        Client.JoinChannel("#" + Roomname.ToLower());
     }
 
     void Update()
     {
+        if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Roomname))
+        {
+            return;
+        }
+
         EventManager.Update();
     }
 }
