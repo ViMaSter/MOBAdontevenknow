@@ -17,7 +17,7 @@ public class AttackBehaviour : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(transform.position, CurrentEnemy.transform.position) < 3.0f)
+        if (Vector3.Distance(transform.position, CurrentEnemy.transform.position) < 7.5f)
         {
             if ((Time.time - LastAttackAt) > AttackRate)
             {
