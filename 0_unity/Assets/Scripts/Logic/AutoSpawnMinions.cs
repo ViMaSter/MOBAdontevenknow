@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 
 public class AutoSpawnMinions : MonoBehaviour {
-    public GameObject LeftMinionPrefab;
-    public GameObject RightMinionPrefab;
-
     public float SpawnInterval = 14.0f;
     private float LastSpawnAt = 0.0f;
 
