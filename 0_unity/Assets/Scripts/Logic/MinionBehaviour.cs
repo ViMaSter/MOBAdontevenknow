@@ -12,7 +12,7 @@ public enum AIState
 [RequireComponent(typeof(NavMeshAgent))]
 public class MinionBehaviour : MonoBehaviour
 {
-    bool IsAttackingHero = false;
+    Map.EntityTypes CurrentlyAttackedType = Map.EntityTypes.NONE;
     AttackBehaviour AttackBehaviour;
     TeamAssociation TeamAssociation;
     NavMeshAgent NavMeshAgent;
@@ -47,9 +47,26 @@ public class MinionBehaviour : MonoBehaviour
         }
     }
 
-    bool EngageInCombat(bool withHeroes)
+    bool EngageInCombat(Map.EntityTypes entityType)
     {
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, 3f, transform.forward, 3f, withHeroes ? 1 << 10 : 1 << 8);
+        int layerMask = 0;
+        switch (entityType)
+        {
+            case Map.EntityTypes.Minion:
+                layerMask = 8;
+                break;
+            case Map.EntityTypes.Hero:
+                layerMask = 10;
+                break;
+            case Map.EntityTypes.Building:
+                layerMask = 11;
+                break;
+            default:
+                Debug.LogWarningFormat(this, "Trying to engage into combat with {0} - no case for that available!", entityType);
+                return false;
+        }
+
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, 3f, transform.forward, 3f, 1 << layerMask);
         foreach (RaycastHit hit in hits)
         {
             TeamAssociation teamAssociation = hit.transform.GetComponent<TeamAssociation>();
@@ -60,7 +77,7 @@ public class MinionBehaviour : MonoBehaviour
                     if (hit.transform.GetComponent<DamageInterface>())
                     {
                         AttackBehaviour.CurrentEnemy = hit.transform.GetComponent<DamageInterface>();
-                        IsAttackingHero = withHeroes;
+                        CurrentlyAttackedType = entityType;
                         return true;
                     }
                 }
@@ -69,6 +86,8 @@ public class MinionBehaviour : MonoBehaviour
         return false;
     }
 
+    // @TODO: Rewrite this to utilize a sphere collider instead of
+    //        recasting a Ray over and over again
 	void Update () {
         if (AssociatedLane == null)
         {
@@ -80,7 +99,7 @@ public class MinionBehaviour : MonoBehaviour
             case AIState.Attacking:
                 if (AttackBehaviour.CurrentEnemy == null)
                 {
-                    if (!EngageInCombat(false) && !EngageInCombat(true))
+                    if (!EngageInCombat(Map.EntityTypes.Minion) && !EngageInCombat(Map.EntityTypes.Minion) && !EngageInCombat(Map.EntityTypes.Building))
                     {
                         CurrentState = AIState.Idle;
                     }
@@ -89,9 +108,12 @@ public class MinionBehaviour : MonoBehaviour
                 {
                     // If a minion is attacking a hero, constantly search for
                     // minions to attack with higher priority
-                    if (IsAttackingHero)
+                    if (CurrentlyAttackedType == Map.EntityTypes.Hero)
                     {
-                        EngageInCombat(false);
+                        if (!EngageInCombat(Map.EntityTypes.Minion))
+                        {
+                            EngageInCombat(Map.EntityTypes.Building);
+                        }
                     }
 
                     float DistanceFromEnemyToNavDestination = Vector3.Distance(AttackBehaviour.CurrentEnemy.transform.position, NavMeshAgent.destination);
@@ -111,7 +133,7 @@ public class MinionBehaviour : MonoBehaviour
                 }
                 break;
             case AIState.Idle:
-                if (EngageInCombat(false) || EngageInCombat(true))
+                if (EngageInCombat(Map.EntityTypes.Minion) || EngageInCombat(Map.EntityTypes.Hero) || EngageInCombat(Map.EntityTypes.Building))
                 {
                     CurrentState = AIState.Attacking;
                     NavMeshAgent.SetDestination(AttackBehaviour.CurrentEnemy.transform.position);
