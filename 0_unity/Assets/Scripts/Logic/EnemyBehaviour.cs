@@ -119,7 +119,7 @@ public class EnemyBehaviour : MonoBehaviour
                     break;
                 }
 
-                if (NavMeshAgent.remainingDistance < 3.0f)
+                if (NavMeshAgent.remainingDistance < 3.0f && !NavMeshAgent.pathPending)
                 {
                     ProgressToNextNode();
                 }
