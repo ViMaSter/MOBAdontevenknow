@@ -83,7 +83,10 @@ public class IRCClient : MonoBehaviour {
     }
 
     void OnDestroy() {
-        Client.Quit("Game shut down.");
+        if (Client != null)
+        {
+            Client.Quit("Game shut down.");
+        }
     }
 
     void Client_ConnectionComplete(object sender, System.EventArgs e)
