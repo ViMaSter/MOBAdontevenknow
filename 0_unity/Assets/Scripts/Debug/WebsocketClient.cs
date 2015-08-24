@@ -131,25 +131,10 @@ public class WebsocketClient : MonoBehaviour
             }
             QueuedAssociations.Clear();
         }
-        
-    }
-
-    private float LastWebUpdate = 0.0f;
-    public float WebUpdateFrequency = 0.1f;
-
-    public void UpdateControlledMinions()
-    {
-
     }
 
     public void Update()
     {
         ProcessQueues();
-
-        if (Time.time - LastWebUpdate > WebUpdateFrequency)
-        {
-            LastWebUpdate = Time.time;
-            UpdateControlledMinions();
-        }
     }
 }
