@@ -24,12 +24,15 @@
             console.log("Close!");
         }
 
-        function determineTouch(element, isLeaving) {
+        function determineTouch(element, isLeaving, isTouch) {
             if (!isLeaving) {
                 rect = element.getBoundingClientRect();
-                var relativeTouchPoint = [
+                var relativeTouchPoint = isTouch ? [
                     (((event.touches[0].pageX - rect.left) / (rect.right - rect.left)) - 0.5) * 2,
                     (((event.touches[0].pageY - rect.top) / (rect.bottom - rect.top)) - 0.5) * -2,
+                ] : [
+                    (((event.clientX - rect.left) / (rect.right - rect.left)) - 0.5) * 2,
+                    (((event.clientY - rect.top) / (rect.bottom - rect.top)) - 0.5) * -2,
                 ];
                 relativeTouchPoint[0] = Math.min(Math.max(-1, relativeTouchPoint[0]), 1);
                 relativeTouchPoint[1] = Math.min(Math.max(-1, relativeTouchPoint[1]), 1);
@@ -70,7 +73,7 @@
     </style>
 </head>
 <body>
-    <div class="control" ontouchstart="determineTouch(this, false)">
+    <div class="control" onclick="determineTouch(this, false, false)" ontouchstart="determineTouch(this, false, true)">
         <div class="area"></div>
     </div>
 </body>
