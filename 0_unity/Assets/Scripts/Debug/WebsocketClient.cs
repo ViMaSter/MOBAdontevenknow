@@ -122,6 +122,7 @@ public class WebsocketClient : MonoBehaviour
                     Debug.Log(string.Format("[WEB] {0} now controls minion {1}", item.Context.Host, minion.name), minion);
                     item.AssociatedMinion = minion;
                     item.AssociatedMinion.name = "[C]" + item.AssociatedMinion.name;
+                    item.AssociatedMinion.GetComponent<MeshRenderer>().material.color = new Color(0.27f, 0.61f, 0.1333f, 1.0f);
                 }
                 else
                 {
