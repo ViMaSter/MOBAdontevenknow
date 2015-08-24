@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fb6266cba1ccb498fc23dc189e0211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GeneralDefense: 20
+  GeneralDefense: 15
 --- !u!1 &22154444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2995,6 +2995,7 @@ Transform:
   - {fileID: 248719984}
   - {fileID: 924534944}
   - {fileID: 1383051746}
+  - {fileID: 1981050973}
   m_Father: {fileID: 0}
   m_RootOrder: 3
 --- !u!1 &1104545242
@@ -3566,7 +3567,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1383051745}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72a4d911febbf904e82864e8786957e9, type: 3}
   m_Name: 
@@ -3751,8 +3752,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c668707937b21d1458f5d049a5881934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftMinionPrefab: {fileID: 0}
-  RightMinionPrefab: {fileID: 0}
   SpawnInterval: 14
   UnitsPerLane: 6
 --- !u!1 &1501398646
@@ -7124,6 +7123,48 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1972342568}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1981050972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1981050973}
+  - 114: {fileID: 1981050974}
+  m_Layer: 0
+  m_Name: Websocket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1981050973
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1981050972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1086840529}
+  m_RootOrder: 3
+--- !u!114 &1981050974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1981050972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dad9528e50703543988daccc8279f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IP: 192.168.0.168
+  Port: 9999
+  WebUpdateFrequency: .100000001
 --- !u!1 &1981976494
 GameObject:
   m_ObjectHideFlags: 0

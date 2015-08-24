@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=1000, initial-scale=1, maximum-scale=1">
+
+    <title>MOBA remote control</title>
+
+    <script type="text/javascript" src="js/extend.js"></script>
+    <script type="text/javascript">
+        var ws = new WebSocket("ws://192.168.0.168:9999/");
+        ws.onopen = function () {
+            console.log("Open!");
+            ws.send("register");
+        }
+        ws.onerror = function (e) {
+            console.log("Error!");
+            console.log(e);
+        }
+        ws.onmessage = function (e) {
+            console.log("Message!");
+            console.log(e);
+        }
+        ws.onclose = function () {
+            console.log("Close!");
+        }
+
+        function determineTouch(element, isLeaving) {
+            if (!isLeaving) {
+                rect = element.getBoundingClientRect();
+                var relativeTouchPoint = [
+                    (((event.touches[0].pageX - rect.left) / (rect.right - rect.left)) - 0.5) * 2,
+                    (((event.touches[0].pageY - rect.top) / (rect.bottom - rect.top)) - 0.5) * -2,
+                ];
+                relativeTouchPoint[0] = Math.min(Math.max(-1, relativeTouchPoint[0]), 1);
+                relativeTouchPoint[1] = Math.min(Math.max(-1, relativeTouchPoint[1]), 1);
+
+                console.log(relativeTouchPoint);
+
+                sendInfo(relativeTouchPoint);
+
+                return relativeTouchPoint;
+            }
+        }
+
+        function sendInfo(touchPoints) {
+            ws.send("movement {0} {1}".format(touchPoints[0], touchPoints[1]));
+        }
+    </script>
+
+    <style type="text/css">
+        .control {
+            display: inline-block;
+            min-width: 1000px;
+            min-height: 500px;
+            border: 1px solid black;
+        }
+
+        .area {
+            display: block;
+            min-width: 1000px;
+            min-height: 500px;
+
+            border: 1px solid grey;
+            background: -webkit-radial-gradient(#AAA 0%, #FFF 70%); /* Safari 5.1 to 6.0 */
+            background: -o-radial-gradient(#AAA 0%, #FFF 70%); /* For Opera 11.6 to 12.0 */
+            background: -moz-radial-gradient(#AAA 0%, #FFF 70%); /* For Firefox 3.6 to 15 */
+            background: radial-gradient(#AAA 0%, #FFF 70%);
+            border-radius: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="control" ontouchstart="determineTouch(this, false)">
+        <div class="area"></div>
+    </div>
+</body>
+</html>
