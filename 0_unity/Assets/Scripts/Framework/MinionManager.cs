@@ -47,12 +47,22 @@ public static class Minions
 
     public static void SpawnAllLanes(bool leftTeam, int MinionsPerLane)
     {
-        foreach (KeyValuePair<string, Lane> lane in leftTeam ? Lanes.LeftTeam : Lanes.RightTeam)
+        Dictionary<string, Lane> TeamLanes = leftTeam ? Lanes.LeftTeam : Lanes.RightTeam;
+        int laneIndex = 0;
+        foreach (KeyValuePair<string, Lane> lane in TeamLanes)
         {
             for (int i = 0; i < MinionsPerLane; i++)
             {
-                Minions.Create(leftTeam, (leftTeam ? Lanes.LeftTeam : Lanes.RightTeam)[lane.Key]);
+                GameObject minion = Minions.Create(leftTeam, (leftTeam ? Lanes.LeftTeam : Lanes.RightTeam)[lane.Key]);
+                minion.transform.position += new Vector3(
+                    3 * Mathf.Cos(((laneIndex * MinionsPerLane) + i + 1) * ((360f / (MinionsPerLane*TeamLanes.Count)) * Mathf.PI / 180.0f)),
+                    0,
+                    3 * Mathf.Sin(((laneIndex * MinionsPerLane) + i + 1) * ((360f / (MinionsPerLane*TeamLanes.Count)) * Mathf.PI / 180.0f))
+                );
             }
+            
+
+            laneIndex++;
         }
     }
 
