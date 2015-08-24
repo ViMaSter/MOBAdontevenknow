@@ -36,7 +36,7 @@ public static class Minions
         gameObject.transform.parent = MinionManagerInstance.ParentGameObject.transform;
         gameObject.transform.position = lane.Root;
 
-        gameObject.GetComponent<EnemyBehaviour>().Init(lane);
+        gameObject.GetComponent<MinionBehaviour>().Init(lane);
         gameObject.GetComponent<TeamAssociation>().IsLeftTeam = isLeftTeam;
 
         AllMinions.Add(gameObject);

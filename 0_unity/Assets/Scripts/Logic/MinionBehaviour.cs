@@ -10,7 +10,7 @@ public enum AIState
 [RequireComponent(typeof(AttackBehaviour))]
 [RequireComponent(typeof(TeamAssociation))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyBehaviour : MonoBehaviour
+public class MinionBehaviour : MonoBehaviour
 {
     bool IsAttackingHero = false;
     AttackBehaviour AttackBehaviour;
