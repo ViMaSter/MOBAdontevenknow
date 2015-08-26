@@ -27,6 +27,9 @@ public class CameraFollow : MonoBehaviour
 
     public void Start()
     {
+        transform.position = Target.position + PositionOffset;
+        transform.rotation = Quaternion.LookRotation(TargetOffset - PositionOffset, Vector3.up);
+
         PostLerpPosition = transform.position;
     }
 
