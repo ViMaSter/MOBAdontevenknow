@@ -16,13 +16,12 @@ public class IRCClient : MonoBehaviour {
         if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Roomname))
         {
             Debug.LogWarning("IRC client requires configuration!", this);
-            return;
         }
 
         EventManager = new EventManager();
 
         Debug.Log("[IRC] Starting...");
-        Client = new IrcClient("irc.twitch.tv", new IrcUser(Username, Username, Password));
+        Client = new IrcClient("chat.eu.freenode.net", new IrcUser(Username, Username, Password));
         Client.ConnectionComplete += Client_ConnectionComplete;
         Client.ChannelMessageRecieved += Client_ChannelMessageRecieved;
 
@@ -99,7 +98,6 @@ public class IRCClient : MonoBehaviour {
     {
         if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Roomname))
         {
-            return;
         }
 
         EventManager.Update();
